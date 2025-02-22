@@ -15,7 +15,7 @@ export default function HomePage() {
         </p>
         <div className="mt-8 flex space-x-4 items-center justify-center">
           <button
-            onClick={() => (window.location.href = "/")}
+            onClick={() => (window.location.href = "/Skills")}
             className="px-6 py-2 font-semibold text-white bg-black rounded-full hover:bg-gray-800"
           >
             Sign up free

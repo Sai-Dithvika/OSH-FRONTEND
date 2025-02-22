@@ -50,7 +50,7 @@ export default function RootLayout({
       >
         <Provider>
           <SessionWrapper>
-            <div className="mt-12">
+            <div className="mt-16">
             <NavigationMenuDemo />
             </div>
             {children}

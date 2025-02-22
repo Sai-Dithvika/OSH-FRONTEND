@@ -3,9 +3,8 @@ import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { useState, useEffect, FC } from "react";
 import axios from "axios";
-import { ArrowBigDown, ArrowBigUp } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, MessageCircle, Send, User } from "lucide-react";
 
-// Define the expected structure of a comment
 interface ExtendedComment {
   comment_id: number;
   post_id: number;
@@ -65,7 +64,7 @@ const Example: FC<{ postId: string }> = () => {
           content: newComment,
           user_id: session.user.name,
           parent_id: null,
-          user_email : session?.user?.email
+          user_email: session?.user?.email
         }),
       });
 
@@ -73,78 +72,118 @@ const Example: FC<{ postId: string }> = () => {
 
       const result = await response.json();
       setComments((prevComments) => [...prevComments, result.data]);
-      setNewComment(""); // Clear the input field
+      setNewComment("");
     } catch (error) {
       console.error("Error creating comment:", error);
     }
   };
 
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (seconds < 60) return `${seconds}s ago`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `${days}d ago`;
+    const months = Math.floor(days / 30);
+    if (months < 12) return `${months}mo ago`;
+    return `${Math.floor(months / 12)}y ago`;
+  };
+
   return (
     <div className="flex justify-center mt-16 px-4">
-      <div className="w-full max-w-2xl bg-gray-50 p-6 rounded-2xl shadow-lg">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
-          Comments
-        </h2>
+      <div className="w-full max-w-3xl">
+        <div className="bg-white rounded-t-xl shadow-sm border border-gray-200">
+          <div className="p-4 border-b border-gray-200">
+            <div className="flex items-center gap-2">
+              <MessageCircle className="w-5 h-5 text-gray-600" />
+              <h2 className="text-lg font-semibold text-gray-900">
+                Comments ({comments.length})
+              </h2>
+            </div>
+          </div>
 
-        {/* Input to add a new comment */}
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="Share your thoughts..."
-          className="w-full p-4 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none text-gray-700"
-          rows={4}
-        />
-        <button
-          onClick={createComment}
-          className="w-full py-3 mb-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition duration-200"
-        >
-          Post Comment
-        </button>
-
-        {/* Displaying comments */}
-        <div className="space-y-6">
-          {comments.length === 0 ? (
-            <p className="text-gray-500 text-center">
-              No comments yet. Be the first to comment!
-            </p>
-          ) : (
-            comments.map(
-              (comment) =>
-                comment && (
-                  <div
-                    key={comment.comment_id}
-                    className="bg-white p-5 rounded-xl shadow-md flex space-x-4"
+          <div className="p-4">
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                  <User className="w-6 h-6 text-gray-500" />
+                </div>
+              </div>
+              <div className="flex-grow">
+                <textarea
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder={session?.user ? "Write a comment..." : "Please sign in to comment"}
+                  disabled={!session?.user}
+                  className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none bg-gray-50 placeholder-gray-500 text-gray-900"
+                  rows={3}
+                />
+                <div className="mt-2 flex justify-end">
+                  <button
+                    onClick={createComment}
+                    disabled={!session?.user || newComment.trim() === ""}
+                    className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white rounded-lg font-medium text-sm transition-colors duration-200"
                   >
-                    <div className="flex flex-col items-center space-y-1">
-                      <ArrowBigUp
-                        className="text-gray-500 cursor-pointer hover:text-blue-600"
-                        size={24}
-                      />
-                      <span className="text-gray-700 font-medium">
-                        {comment.likes}
-                      </span>
-                      <ArrowBigDown
-                        className="text-gray-500 cursor-pointer hover:text-red-600"
-                        size={24}
-                      />
-                      <span className="text-gray-700 font-medium">
-                        {comment.dislikes}
-                      </span>
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-semibold text-gray-700">
-                        {comment.user_id}
-                        <span className="ml-2 text-xs text-gray-500">
-                          {new Date(comment.created_at).toLocaleString()}
+                    <Send className="w-4 h-4 mr-2" />
+                    Post Comment
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 rounded-b-xl shadow-sm border-x border-b border-gray-200">
+          {comments.length === 0 ? (
+            <div className="p-8 text-center">
+              <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500 font-medium">No comments yet</p>
+              <p className="text-gray-400 text-sm mt-1">Be the first to share your thoughts!</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-200">
+              {comments.map((comment) => (
+                <div key={comment.comment_id} className="p-4 hover:bg-gray-100 transition-colors duration-200">
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                        <span className="text-gray-600 font-medium">
+                          {comment.user_id.charAt(0).toUpperCase()}
                         </span>
-                      </p>
-                      <p className="mt-2 text-gray-900">
-                        {comment.content || "No content available"}
-                      </p>
+                      </div>
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-medium text-gray-900">{comment.user_id}</span>
+                        <span className="text-xs text-gray-500">
+                          {formatTimeAgo(comment.created_at)}
+                        </span>
+                      </div>
+                      <p className="text-gray-800 whitespace-pre-wrap">{comment.content}</p>
+                      <div className="mt-2 flex items-center gap-4">
+                        <div className="flex items-center gap-1">
+                          <button className="p-1 hover:bg-gray-200 rounded-full transition-colors duration-200">
+                            <ArrowBigUp className="w-5 h-5 text-gray-500 hover:text-blue-600" />
+                          </button>
+                          <span className="text-sm font-medium text-gray-700">{comment.likes}</span>
+                          <button className="p-1 hover:bg-gray-200 rounded-full transition-colors duration-200">
+                            <ArrowBigDown className="w-5 h-5 text-gray-500 hover:text-red-600" />
+                          </button>
+                          <span className="text-sm font-medium text-gray-700">{comment.dislikes}</span>
+                        </div>
+                        <button className="text-sm text-gray-500 hover:text-gray-700">Reply</button>
+                      </div>
                     </div>
                   </div>
-                )
-            )
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>

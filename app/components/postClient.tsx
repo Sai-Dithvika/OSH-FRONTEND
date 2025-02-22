@@ -26,35 +26,47 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
         if (response.ok) {
           const data = await response.json();
           setTotalLikes(data.totalLikes);
+          setVotesAmt(data.totalLikes);
         }
       } catch (error) {
         console.error("Error fetching total likes:", error);
       }
     };
     fetchTotalLikes();
-  }, [postId]);
+  }, [postId, setVotesAmt]);
 
   useEffect(() => {
     const savedVote = localStorage.getItem(`vote_${postId}`);
     if (savedVote === "UP" || savedVote === "DOWN") {
       setCurrentVote(savedVote as "UP" | "DOWN");
-      setVotesAmt((prev) => prev + (savedVote === "UP" ? 1 : -1));
     }
-  }, [postId, setVotesAmt]);
+  }, [postId]);
 
   const handleVote = async (type: "UP" | "DOWN") => {
     const isUpvote = type === "UP";
+    let newTotalLikes = totalLikes;
+
     if (currentVote === type) {
-      setVotesAmt((prev) => prev - (isUpvote ? 1 : -1));
+      // Removing the vote
+      newTotalLikes = totalLikes + (isUpvote ? -1 : 1);
       setCurrentVote(null);
       localStorage.removeItem(`vote_${postId}`);
-      await submitVote(null);
-      return;
+    } else {
+      // Adding or changing vote
+      if (currentVote === null) {
+        // First vote
+        newTotalLikes = totalLikes + (isUpvote ? 1 : -1);
+      } else {
+        // Changing vote
+        newTotalLikes = totalLikes + (isUpvote ? 2 : -1);
+      }
+      setCurrentVote(type);
+      localStorage.setItem(`vote_${postId}`, type);
     }
-    setVotesAmt((prev) => prev + (isUpvote ? 1 : -1) * (currentVote ? 2 : 1));
-    setCurrentVote(type);
-    localStorage.setItem(`vote_${postId}`, type);
-    await submitVote(isUpvote);
+
+    setTotalLikes(newTotalLikes);
+    setVotesAmt(newTotalLikes);
+    await submitVote(currentVote === type ? null : isUpvote);
   };
 
   const submitVote = async (isUpvote: boolean | null) => {
@@ -71,20 +83,21 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 sm:gap-0 pr-6 sm:w-20 pb-4 sm:pb-0">
+    <div className="flex items-center gap-1">
       <Button
         onClick={() => handleVote("UP")}
         size="sm"
         variant="ghost"
         aria-label="upvote"
+        className="p-0 h-auto"
       >
         <ArrowBigUp
           className={`h-5 w-5 ${
-            currentVote === "UP" ? "text-emerald-500" : "text-zinc-700"
+            currentVote === "UP" ? "text-emerald-500 fill-emerald-500" : "text-zinc-700"
           }`}
         />
       </Button>
-      <p className="text-center py-2 font-medium text-sm text-zinc-900">
+      <p className="text-center font-medium text-sm text-zinc-900 min-w-[2rem]">
         {totalLikes}
       </p>
       <Button
@@ -92,10 +105,11 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
         size="sm"
         variant="ghost"
         aria-label="downvote"
+        className="p-0 h-auto"
       >
         <ArrowBigDown
           className={`h-5 w-5 ${
-            currentVote === "DOWN" ? "text-red-500" : "text-zinc-700"
+            currentVote === "DOWN" ? "text-red-500 fill-red-500" : "text-zinc-700"
           }`}
         />
       </Button>

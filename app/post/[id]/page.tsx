@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
+import PostVoteClient from "@/app/components/postClient";
 
 interface PostData {
   title: string;
@@ -16,6 +17,7 @@ interface PostData {
   user_id: string;
   imageurl: string;
   room_id: string;
+  upvotes: number;
 }
 
 interface PostPageProps {
@@ -31,6 +33,7 @@ const PostPage = ({ params }: PostPageProps) => {
   const { id } = params;
   const [post, setPost] = useState<PostData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [votesAmt, setVotesAmt] = useState<number>(0);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -46,6 +49,7 @@ const PostPage = ({ params }: PostPageProps) => {
         }
         const result = await response.json();
         setPost(result.data[0]);
+        setVotesAmt(result.data[0].upvotes || 0);
         localStorage.setItem("room_id", result.data[0].room_id);
       } catch (err: any) {
         console.error("Error fetching post:", err);
@@ -115,13 +119,20 @@ const PostPage = ({ params }: PostPageProps) => {
 
             {/* Bottom actions */}
             <div className="px-6 py-4 bg-gray-50 flex items-center justify-between">
-              <Link
-                href={`/post/${post.post_id}/comment`}
-                className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
-              >
-                <MessageSquare className="w-4 h-4" />
-                <span>{post.total_comments || 0} comments</span>
-              </Link>
+              <div className="flex items-center gap-4">
+                <PostVoteClient
+                  postId={post.post_id.toString()}
+                  initialVotesAmt={votesAmt}
+                  setVotesAmt={setVotesAmt}
+                />
+                <Link
+                  href={`/post/${post.post_id}/comment`}
+                  className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>{post.total_comments || 0} comments</span>
+                </Link>
+              </div>
               <button className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900">
                 <PlusCircle className="w-4 h-4" />
                 <span>Create Your post</span>

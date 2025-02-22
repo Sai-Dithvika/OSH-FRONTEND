@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { MessageSquare } from "lucide-react";
 import Link from "next/link";
 import PostVoteClient from "../components/postClient";
-import { error } from "console";
 
 interface Post {
   id: string;
@@ -15,7 +14,7 @@ interface Post {
 }
 
 const RenderPost = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const handleGetPost = async () => {
@@ -57,14 +56,12 @@ const RenderPost = () => {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       {loading ? (
-        <p>Loading posts...</p>
+        <div>Loading posts...</div>
       ) : (
         posts.map((post) => (
-          <Link href={`/post/${post.id}`} key={post.id}>
-            <PostItem post={post} />
-          </Link>
+          <PostItem key={post.id} post={post} />
         ))
       )}
     </div>
@@ -80,50 +77,47 @@ const PostItem = ({ post }: { post: Post }) => {
   };
 
   return (
-    <>
-      <div className="rounded-md bg-white shadow mt-14">
-        <div className="px-6 py-4 flex justify-between">
+    <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="px-6 py-4">
+        <div className="mb-2">
+          <Link href={`/open/${post.title}`} className="text-lg font-semibold hover:underline">
+            {post.title}
+          </Link>
+          <span className="mx-2 text-gray-500">•</span>
+          <span className="text-sm text-gray-500">Posted by u/{post.author}</span>
+        </div>
+        
+        <p className="text-sm text-gray-600">
+          To know more about {post.title}, visit the detailed page
+        </p>
+        
+        <p className="mt-2 text-gray-800">
+          {trimContent(post.content)}
+        </p>
+      </div>
+
+      <div className="flex items-center justify-between border-t border-gray-200 px-6 py-2">
+        <div className="flex items-center space-x-4">
           <PostVoteClient
             postId={post.id}
             initialVotesAmt={votesAmt}
-            setVotesAmt={setVotesAmt}
-            upvotes={post.upvotes}
-            downvotes={post.downvotes}
+            initialVote={0}
           />
-          <div className="w-0 flex-1">
-            <div className="max-h-40 mt-1 text-xs text-gray-500">
-              <span className="underline text-zinc-900 text-sm font-bold underline-offset-2">
-                open/{post.title}
-              </span>
-              <span className="px-1">•</span>
-              <span>Posted by u/{post.author}</span>
-            </div>
-            <Link href={`/post/${post.id}`}>
-              <h1 className="text-lg font-semibold py-2 leading-6 text-gray-900">
-                To know more about {post.title}, visit the detailed page
-              </h1>
-            </Link>
-            <div className="relative text-sm max-h-40 w-full overflow-clip">
-              <p>{trimContent(post.content)}</p>
-            </div>
+          
+          <div className="flex items-center space-x-2">
+            <MessageSquare className="h-4 w-4" />
+            <span className="text-sm text-gray-500">0 comments</span>
           </div>
         </div>
-        <div className="bg-gray-50 z-20 text-sm px-4 py-4 sm:px-6">
-          <Link
-            href={`/post/${post.id}/comment`}
-            className="w-fit flex items-center gap-2 text-blue-500"
-          >
-            <MessageSquare className="h-4 w-4 " />0 comments
-          </Link>
-          <Link
-            href={`/post/${post.id}`}
-            className="w-fit flex items-center gap-2 text-blue-500"
-          >
-            View full post
-          </Link>
-        </div>
+        
+        <Link 
+          href={`/post/${post.id}`}
+          className="text-sm text-blue-600 hover:underline"
+        >
+          View full post
+        </Link>
       </div>
-    </>
+    </div>
   );
 };
 
