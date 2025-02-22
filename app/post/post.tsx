@@ -81,7 +81,7 @@ const PostItem = ({ post }: { post: Post }) => {
 
   return (
     <>
-      <div className="rounded-md bg-white shadow-md mt-14">
+      <div className="rounded-md bg-white shadow mt-14">
         <div className="px-6 py-4 flex justify-between">
           <PostVoteClient
             postId={post.id}

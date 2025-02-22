@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { useState, useEffect, FC } from "react";
 import axios from "axios";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
-import { toast } from "react-hot-toast";
 
 // Define the expected structure of a comment
 interface ExtendedComment {
@@ -35,7 +34,6 @@ const Example: FC<{ postId: string }> = () => {
         if (response.data.statusCode === 200 && Array.isArray(result)) {
           setComments(result);
         } else if (result.data.statusCode == 403) {
-          toast.error("Inappropriate content detected");
           setComments([]);
         } else {
           console.error("Unexpected response structure:", result);
