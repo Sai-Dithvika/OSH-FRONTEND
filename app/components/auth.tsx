@@ -67,6 +67,8 @@ export function NavigationMenuDemo() {
   const { data: session } = useSession();
 
   return (
+    <div className="fixed h-16 top-0 left-0 w-full bg-gradient-to-b from-muted to-muted shadow-md">
+
     <div className="flex items-center justify-between w-full px-4 py-2">
       
     <Image
@@ -157,7 +159,7 @@ export function NavigationMenuDemo() {
       )}
 
     </div>
-  
+ </div> 
   );
 }
 
@@ -219,3 +221,4 @@ const ListItem = React.forwardRef<
   );
 });
 ListItem.displayName = "ListItem";
+

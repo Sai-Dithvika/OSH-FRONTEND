@@ -1,6 +1,6 @@
 // import Nav from "@/app/components/navbar";
 import Sidebar from "./navbar";
-import features from "../Data/features";
+import features from "@/app/Data/features";
 import FAQAccordion from "./acoordion";
 // import Footer from "./home";
 
@@ -79,10 +79,10 @@ export default function Tutorial() {
 
   return (
     <>
-      <div className="flex min-h-screen font-serif bg-gradient-to-r from-gradient-start via-white to-gradient-end/30 font-normal">
+      <div className="flex min-h-screen shadow-md font-serif bg-[#ffffff] font-normal">
         <Sidebar sections={sections} />
         <div className="flex-1 text-left">
-          <div id="introduction" className="mt-10 max-w-4xl mx-auto">
+          <div id="introduction" className="mt-12 max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold">
               Welcome to the Quickie Documentation!
             </h1>
@@ -114,8 +114,8 @@ export default function Tutorial() {
             className="border-t-2 border-dashed border-gray-400 my-4 mt-6 max-w-4xl mx-auto"
           >
             <h2 className="text-3xl font-bold mt-8">Features</h2>
-            <div className="overflow-x-auto mt-4">
-              <table className="min-w-full bg-black/80 border border-gray-200">
+            <div className="overflow-x-auto mt-4 bg-black/80  ">
+              <table className="min-w-full border border-gray-200">
                 <thead>
                   <tr>
                     <th className="px-6 py-3 border-b font-semibold text-left text-white">
@@ -128,7 +128,10 @@ export default function Tutorial() {
                 </thead>
                 <tbody>
                   {features.map((feature, index) => (
-                    <tr key={index} className="bg-black/80">
+                    <tr
+                      key={index}
+                      
+                    >
                       <td className="px-6 py-4 border-b text-white font-semibold">
                         {feature.feature}
                       </td>

@@ -33,7 +33,7 @@ export default function RootLayout({
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-CEM0FR3VWY"
-        ></script>
+        ></script>  
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -50,7 +50,9 @@ export default function RootLayout({
       >
         <Provider>
           <SessionWrapper>
+            <div className="mt-12">
             <NavigationMenuDemo />
+            </div>
             {children}
           </SessionWrapper>
         </Provider>
