@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Open Source Hub - Frontend 
+
+- Open Source Hub is a community-driven platform built with TypeScript and React, designed to connect open-source enthusiasts, foster collaboration, and provide meaningful project recommendations. Whether you're a beginner or an experienced contributor, Open Source Hub helps you engage with projects that match your skills and interests.
+Openhub frontend setup:
+
+## ✨ Features  
+
+### 📌 Posts & Discussions  
+- Share updates, ideas, and contributions with the community.  
+- Engage in discussions to refine and improve open-source projects.  
+- Get feedback and collaborate with like-minded developers.  
+
+### 🤝 Collaboration Support  
+- Find contributors for your project or join existing ones.  
+- Support open-source initiatives through structured discussions and teamwork.  
+- Encourage inclusive participation by connecting people with shared interests.  
+
+### 📖 Documentation Page  
+- Access detailed guides, FAQs, and onboarding materials.  
+- Learn how to contribute effectively and navigate the platform.  
+- Keep track of updates, best practices, and platform policies.  
+
+### 🧩 Skill Set Collection & Project Recommendations  
+- Collect and showcase your skills to discover relevant open-source projects.  
+- Get personalized recommendations based on your expertise.  
+- Foster an inclusive environment by guiding newcomers toward suitable opportunities.  
 
 ## Getting Started
 
-First, run the development server:
+## Installation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+git clone https://github.com/Sai-Dithvika/OSH-FRONTEND.git
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Install dependencies
 
-## Learn More
+```
 
-To learn more about Next.js, take a look at the following resources:
+npm install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Environment setup
 
-## Deploy on Vercel
+### Create .env.local
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+GITHUB_ID=
+GITHUB_SECRET= 
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=http://localhost:3000
+UPLOADTHING_TOKEN=
+UPLOADTHING_SECRET='
+
+```
+## Run Frontend
+
+```
+
+npm run dev
+
+```
