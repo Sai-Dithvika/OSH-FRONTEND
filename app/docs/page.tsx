@@ -111,7 +111,7 @@ export default function FeaturesPage() {
                     </div> */}
 
           <div className="flex flex-col items-center h-[500px] w-full justify-center bg-white">
-            <div className="text-4xl font-bold">WHY QUICKIE?</div>
+            <div className="text-4xl font-bold">WHY Open-Hub?</div>
             <div className="text-3xl font-semibold mt-8">
               Your Fast Track to Open Source Contributions
             </div>
