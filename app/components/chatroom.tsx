@@ -14,16 +14,16 @@ const ChatRoom = ({ roomId, userId }) => {
 
   useEffect(() => {
     // Join the room
-    socket.emit("join_room", roomId);
+    socket.emit("joinRoom", roomId);
 
     // Listen for new messages
-    socket.on("receive_message", (newMessage) => {
+    socket.on("message", (newMessage) => {
       console.log("Received message:", newMessage);
       setMessages((prev) => [...prev, newMessage]); // Update state with new messages
     });
 
     return () => {
-      socket.off("receive_message"); // Clean up on unmount
+      socket.off("message"); // Clean up on unmount
     };
   }, [roomId]);
 
@@ -32,7 +32,7 @@ const ChatRoom = ({ roomId, userId }) => {
       const newMessage = { user_id: userId, msg: message };
 
       // Emit message to server
-      socket.emit("send_message", { roomId, ...newMessage });
+      socket.emit("message", { roomId, ...newMessage });
 
       setMessages((prev) => [...prev, newMessage]); // Update own state
       setMessage(""); // Clear input

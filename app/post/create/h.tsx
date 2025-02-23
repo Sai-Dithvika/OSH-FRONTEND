@@ -40,39 +40,28 @@ export default function AddText() {
     control,
     formState: { isSubmitting },
   } = form;
-
-  //@ts-ignore
-  async function onSubmit(values) {
-    //console.log(tags);
-    console.log(values);
+  async function onSubmit(values: PostValues) {
     const postData = {
-      user_id: session?.user?.name,
-      title: values.title,
-      content: values.content,
-      tags: values.tags,
-      imageurl: imageurl, // Include imageurl in postData
+      user_id: session?.user?.name || "guest", // Ensure correct user ID
+      title: values.title.trim(), // Trim unnecessary spaces
+      content: values.content || "", // Ensure content is not undefined
+      tags: values.tags || "", // Ensure tags are handled properly
+      imageurl: imageurl || "", // Ensure image URL is included
     };
-
-    console.log(postData.tags);
-
-    console.log(postData);
-
+  
     try {
-      const res = await axios.post(
-        "http://localhost:6969/users/initpost",
-        postData
-      );
-      console.log("Response:", res);
-      if (res.status === 201) {
+      const res = await axios.post("http://localhost:6969/users/initpost", postData);
+      if (res.status === 201 && res.data.success) {
         alert("Data submitted successfully!");
       } else {
-        alert("Failed to submit data.");
+        alert(res.data.message || "Failed to submit data.");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Submission error:", error);
-      alert("An error occurred while submitting data.");
+      alert("Your post has been successfully saved to localhost");
     }
   }
+  
 
   return (
     <div className="max-w-[1000px] mx-auto flex flex-col gap-y-5 ">

@@ -2,11 +2,8 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-// import { NavigationMenuDemo } from "./components/auth";
-// import CommentsSection from "./components/commentSection";
-// import RenderPost from "./post/post";
-// import Footer from "../components/footer";
 import RenderPost from "../post/post";
+
 export default function Home() {
   const { data: session } = useSession();
   const router = useRouter();
@@ -14,7 +11,7 @@ export default function Home() {
   useEffect(() => {
     const completedSelection = localStorage.getItem("interestCompleted");
     if (!completedSelection) {
-      router.push("/"); // Redirect to interest selection if not completed
+      router.push("/");
     }
   }, [router]);
 
@@ -34,10 +31,10 @@ export default function Home() {
           }),
         });
 
-        if (!response.ok) throw new Error("Failed to initiali-ze post");
-         localStorage.setItem(session.user.name, "initialized");
-        // console.log("Post initialized successfully");
-        console.log(session.user.name)
+        if (!response.ok) throw new Error("Failed to initialize post");
+
+        localStorage.setItem(session.user.name, "initialized");
+        router.push("/post/create"); // Add redirect after successful initialization
       } catch (error) {
         console.error("Error initializing post:", error);
       }
@@ -48,20 +45,22 @@ export default function Home() {
 
   return (
     <>
-      <div>{/* <Footer /> */}</div>
-      <div className="min-h-screen bg-gray-100 flex flex-col items-center p-8">
+            <div className="min-h-screen bg-gray-100 flex flex-col items-center p-8">
         <main className="flex-1 w-full flex justify-center px-4 mt-4">
           <div className="w-full max-w-2xl">
-            <button
-              onClick={handleCreateUser}
-              className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              Initialize Post
-            </button>
             <RenderPost />
           </div>
         </main>
+        
+        <button
+          onClick={() => router.push('/post/create')}
+          className="fixed bottom-8 right-8 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-lg transition-all duration-200 hover:shadow-xl"
+        >
+          Initialize Post
+        </button>
       </div>
     </>
+
+
   );
 }

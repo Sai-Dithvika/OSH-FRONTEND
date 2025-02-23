@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
+import { useRouter } from "next/router";
 import PostVoteClient from "@/app/components/postClient";
 
 interface PostData {
@@ -34,6 +35,7 @@ const PostPage = ({ params }: PostPageProps) => {
   const [post, setPost] = useState<PostData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [votesAmt, setVotesAmt] = useState<number>(0);
+  // const router = useRouter();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -135,7 +137,7 @@ const PostPage = ({ params }: PostPageProps) => {
               </div>
               <button className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900">
                 <PlusCircle className="w-4 h-4" />
-                <span>Create Your post</span>
+                <Link href ='/post/create' className="hover:underline">Create Your post</Link>
               </button>
             </div>
           </div>
