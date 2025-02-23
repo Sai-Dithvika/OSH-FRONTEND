@@ -25,6 +25,7 @@ Openhub frontend setup:
 - Get personalized recommendations based on your expertise.  
 - Foster an inclusive environment by guiding newcomers toward suitable opportunities.  
 
+
 ## Getting Started
 
 ## Installation
@@ -64,3 +65,7 @@ UPLOADTHING_SECRET='
 npm run dev
 
 ```
+## Updates
+- Uploaded the [`updatedUI`](https://github.com/Sai-Dithvika/OSH-FRONTEND/tree/main/updateUi) folder  with the latest improvements.
+
+
